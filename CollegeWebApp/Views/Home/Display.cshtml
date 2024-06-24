@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Display";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            transition: background-color 0.3s, padding 0.3s;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: darkslategray;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .date-text {
+            font-size: 1.2rem;
+            color: darkslategray;
+        }
+
+        button {
+            background-color: white;
+            color: darkslategray;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center welcome-section">
+            <h1 class="display-4">What is today's date?</h1>
+            <p class="date-text">The current date is: @ViewBag.FormattedDate</p>
+            <button id="colorChangeButton">Click to reveal date</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const button = document.querySelector('#colorChangeButton');
+            button.addEventListener('click', function () {
+                document.querySelector('.date-text').style.color = 'white';
+            });
+        });
+    </script>
+</body>
+</html>

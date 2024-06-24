@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollegeWebApp", "CollegeWebApp\CollegeWebApp.csproj", "{88490DE6-7A03-4983-95D2-639DBFE09E5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolManagementLibrary", "SchoolManagementLibrary\SchoolManagementLibrary.csproj", "{38A4925A-C535-4879-B6CA-B491495622CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88490DE6-7A03-4983-95D2-639DBFE09E5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88490DE6-7A03-4983-95D2-639DBFE09E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88490DE6-7A03-4983-95D2-639DBFE09E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88490DE6-7A03-4983-95D2-639DBFE09E5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A4925A-C535-4879-B6CA-B491495622CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A4925A-C535-4879-B6CA-B491495622CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A4925A-C535-4879-B6CA-B491495622CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A4925A-C535-4879-B6CA-B491495622CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F83117A0-3198-412E-9F9D-D64517D7D1DB}
+	EndGlobalSection
+EndGlobal
