@@ -1,102 +1,503 @@
-﻿@model IEnumerable<CollegeWebApp.Models.Student>
+﻿@model PaginatedList<CollegeWebApp.Models.Student>
 @{
     ViewData["Title"] = "Students";
+    ViewData["CurrentFilter"] = ViewData["CurrentFilter"] ?? "";
 }
+<style>
+    /* Full page background */
+    .full-page-background {
+        background-image: url('/images/college2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Your Application Name</title>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
+        .full-page-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 1;
         }
 
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
+    /* Main content wrapper */
+    .page-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 10px 0 40px 0;
+    }
+
+    /* Page Header */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .page-header h1 {
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0;
         }
 
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
+        .page-header .lead {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 1rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+    /* Glass Card */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.10);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        overflow: hidden;
+        color: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        margin-bottom: 1.5rem;
+    }
+
+        .glass-card .card-body {
+            padding: 1.5rem;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
+    /* Search Form */
+    .search-form .input-group {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .search-form .input-group-text {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        padding: 0.6rem 1rem;
+    }
+
+    .search-form .form-control {
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        padding: 0.6rem 0;
+    }
+
+        .search-form .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
+        .search-form .form-control:focus {
+            box-shadow: none;
+            background: transparent;
+            color: #ffffff;
         }
 
-        th {
-            background-color: #f2f2f2;
+    .search-form .btn {
+        border-radius: 0 12px 12px 0;
+        padding: 0.6rem 1.5rem;
+        border: none;
+    }
+
+    /* Button Styles */
+    .btn-glass-primary {
+        background: rgba(75, 108, 183, 0.6);
+        border: 1px solid rgba(75, 108, 183, 0.3);
+        color: #ffffff;
+        padding: 0.6rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-glass-primary:hover {
+            background: rgba(75, 108, 183, 0.8);
+            border-color: rgba(75, 108, 183, 0.6);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(75, 108, 183, 0.3);
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+    .btn-glass-secondary {
+        background: rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        padding: 0.6rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-glass-secondary:hover {
+            background: rgba(255, 255, 255, 0.20);
+            border-color: rgba(255, 255, 255, 0.30);
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
-        .action-links a {
-            color: #337ab7;
-            text-decoration: none;
-            margin-right: 10px;
+    /* Table Styles */
+    .glass-table {
+        margin-bottom: 0;
+    }
+
+        .glass-table thead th {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-custom {
-            background-color: darkslategray;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s, box-shadow 0.3s;
+        .glass-table tbody td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+            color: rgba(255, 255, 255, 0.9);
         }
 
-            .btn-custom:hover {
-                background-color: #007bff;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .glass-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .glass-table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.06);
             }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>@ViewData["Title"]</h1>
 
-        <p>
-            <a href="@Url.Action("Create")" class="btn btn-primary btn-custom">Create New</a>
-        </p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.StudentName)</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
+            .glass-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+    /* Avatar */
+    .avatar-circle {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+        flex-shrink: 0;
+        color: #ffffff;
+        background: rgba(75, 108, 183, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.7);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        margin: 0 2px;
+    }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .action-btn.edit:hover {
+            background: rgba(75, 108, 183, 0.4);
+            border-color: rgba(75, 108, 183, 0.5);
+        }
+
+        .action-btn.details:hover {
+            background: rgba(23, 162, 184, 0.4);
+            border-color: rgba(23, 162, 184, 0.5);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(220, 53, 69, 0.4);
+            border-color: rgba(220, 53, 69, 0.5);
+        }
+
+    /* Pagination */
+    .glass-pagination .page-link {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0.5rem 1rem;
+        margin: 0 3px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .glass-pagination .page-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+    .glass-pagination .page-item.active .page-link {
+        background: rgba(75, 108, 183, 0.6);
+        border-color: rgba(75, 108, 183, 0.4);
+        color: #ffffff;
+    }
+
+    .glass-pagination .page-item.disabled .page-link {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 3rem 1.5rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .empty-state h5 {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+    /* Count Badge */
+    .count-badge {
+        background: rgba(255, 255, 255, 0.12);
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-left: 0.5rem;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+        .glass-card .card-body {
+            padding: 1rem;
+        }
+
+        .search-form .input-group {
+            flex-wrap: wrap;
+        }
+
+        .search-form .btn {
+            width: 100%;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .glass-table {
+            font-size: 0.85rem;
+        }
+
+            .glass-table thead th,
+            .glass-table tbody td {
+                padding: 0.5rem 0.6rem;
+            }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+        }
+
+        .btn-glass-primary {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .glass-pagination .page-link {
+            padding: 0.3rem 0.7rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .glass-table thead th {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.4rem;
+        }
+
+        .glass-table tbody td {
+            padding: 0.4rem 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        .avatar-circle {
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .action-btn {
+            width: 24px;
+            height: 24px;
+            font-size: 0.7rem;
+        }
+    }
+</style>
+
+<!-- Background Image -->
+<div class="full-page-background"></div>
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>
+                    <i class="fas fa-user-graduate me-2"></i> Students
+                    <span class="count-badge">@ViewBag.TotalStudents</span>
+                </h1>
+                <p class="lead">Manage all registered students</p>
+            </div>
+            <div>
+                <a asp-action="Create" class="btn-glass-primary">
+                    <i class="fas fa-plus-circle"></i> Create New
+                </a>
+            </div>
+        </div>
+
+        <!-- Search Card -->
+        <div class="glass-card">
+            <div class="card-body">
+                <form asp-action="Index" method="get" class="search-form">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+                               class="form-control" placeholder="Search by student name or ID..." />
+                        <button class="btn btn-glass-primary" type="submit">
+                            <i class="fas fa-search me-1"></i> Search
+                        </button>
+                        <a asp-action="Index" class="btn-glass-secondary" style="border-radius: 0 12px 12px 0;">
+                            <i class="fas fa-times"></i> Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="glass-card">
+            <div class="card-body p-0">
+                @if (Model.Any())
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
-                        <td class="action-links">
-                            <a asp-action="Edit" asp-route-id="@item.StudentID">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.StudentID">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.StudentID">Delete</a>
-                        </td>
-                    </tr>
+                    <div class="table-responsive">
+                        <table class="table glass-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <i class="fas fa-user me-1"></i> @Html.DisplayNameFor(model => model.First().StudentName)
+                                    </th>
+                                    <th class="text-end" style="width: 150px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="avatar-circle">
+                                                    @(item.StudentName?.Length > 0 ? item.StudentName[0].ToString().ToUpper() : "?")
+                                                </div>
+                                                <span>@Html.DisplayFor(modelItem => item.StudentName)</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <a asp-action="Edit" asp-route-id="@item.StudentID" class="action-btn edit" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.StudentID" class="action-btn details" title="Details">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.StudentID" class="action-btn delete" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
-            </tbody>
-        </table>
+                else
+                {
+                    <!-- Empty State -->
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h5>No students found</h5>
+                        <p>@(string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()) ? "Start by creating your first student." : "No students match your search criteria.")</p>
+                        @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                        {
+                            <a asp-action="Index" class="btn-glass-secondary">
+                                <i class="fas fa-times me-1"></i> Clear Search
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Create" class="btn-glass-primary">
+                                <i class="fas fa-plus-circle me-1"></i> Create Student
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+            @if (Model.Any() && Model.TotalPages > 1)
+            {
+                <div class="card-footer" style="background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.08); padding: 1rem;">
+                    <div class="glass-pagination">
+                        @await Html.PartialAsync("_PaginationPartial", Model)
+                    </div>
+                </div>
+            }
+        </div>
+
     </div>
-</body>
-</html>
+</div>

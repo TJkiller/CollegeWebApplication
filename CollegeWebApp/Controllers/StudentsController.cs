@@ -18,10 +18,29 @@ namespace CollegeWebApp.Controllers
             _context = context;
         }
 
-        // GET: Students
-        public async Task<IActionResult> Index()
+        // GET: Students with Search and Pagination
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
-            return View(await _context.Students.ToListAsync());
+            // Pass search string to view for pagination
+            ViewData["CurrentFilter"] = searchString;
+
+            var students = from s in _context.Students
+                           select s;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s =>
+                    s.StudentName != null &&
+                    (s.StudentName.Contains(searchString) ||
+                     s.StudentID.ToString().Contains(searchString))
+                );
+            }
+
+            // Get total count for display
+            ViewBag.TotalStudents = await students.CountAsync();
+
+            int pageSize = 10;
+            return View(await PaginatedList<Student>.CreateAsync(students, pageNumber ?? 1, pageSize));
         }
 
         // GET: Students/Details/5
@@ -59,6 +78,7 @@ namespace CollegeWebApp.Controllers
             {
                 _context.Add(student);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Student created successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(student);
@@ -98,6 +118,7 @@ namespace CollegeWebApp.Controllers
                 {
                     _context.Update(student);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Student updated successfully!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -142,6 +163,7 @@ namespace CollegeWebApp.Controllers
             if (student != null)
             {
                 _context.Students.Remove(student);
+                TempData["SuccessMessage"] = "Student deleted successfully!";
             }
 
             await _context.SaveChangesAsync();
