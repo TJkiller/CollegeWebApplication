@@ -1,50 +1,459 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: 'Times New Roman', Times, serif;
-        }
+<style>
+    /* Full page background */
+    .full-page-background {
+        background-image: url('/images/college2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
 
-        .full-page-background {
-            background-image: url('images/college2.jpg');
-            background-size: cover;
-            background-position: center;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .content {
-            position: relative;
+        .full-page-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
             z-index: 1;
-            color: #f0f0f0; 
-            background-color: rgba(0, 0, 0, 0.5); 
-            padding: 20px;
         }
-    </style>
-</head>
-<body>
 
-    <div class="full-page-background"></div>
+    /* Main content wrapper */
+    .dashboard-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 20px 0;
+    }
 
-    <div class="text-center content">
-        <h1 class="display-4">WELCOME TO RAISE COLLEGE VIEW INSIDER</h1>
-      
+    /* Welcome Section - Transparent overlay */
+    .welcome-section {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        color: #ffffff;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+        .welcome-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .welcome-section .lead {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-section hr {
+            border-color: rgba(255, 255, 255, 0.2);
+            margin: 1.5rem 0;
+        }
+
+    /* Glass morphism cards */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        color: #ffffff;
+        transition: all 0.3s ease;
+        height: 100%;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card .display-1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-card .card-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-card .card-text {
+            opacity: 0.8;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .glass-card .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 0.4rem 1.5rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+            .glass-card .btn-outline-light:hover {
+                background: rgba(255, 255, 255, 0.2);
+                border-color: #ffffff;
+                transform: scale(1.05);
+            }
+
+    /* Recent modules glass card */
+    .glass-table-card {
+        background: rgba(255, 255, 255, 0.10);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        overflow: hidden;
+        color: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        margin-bottom: 2rem;
+    }
+
+        .glass-table-card .card-header {
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .glass-table-card .card-body {
+            padding: 10;
+        }
+
+        .glass-table-card .table {
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+
+            .glass-table-card .table thead th {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                color: rgba(255, 255, 255, 0.8);
+                font-weight: 600;
+                padding: 0.8rem 1.5rem;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .glass-table-card .table tbody td {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 0.8rem 1.5rem;
+                vertical-align: middle;
+            }
+
+            .glass-table-card .table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            .glass-table-card .table .badge {
+                padding: 0.4rem 0.8rem;
+                border-radius: 20px;
+                font-weight: 500;
+            }
+
+        .glass-table-card .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 0.2rem 1rem;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+            .glass-table-card .btn-outline-light:hover {
+                background: rgba(255, 255, 255, 0.2);
+                border-color: #ffffff;
+            }
+
+    /* Quick action buttons in welcome section */
+    .btn-glass {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+        padding: 0.6rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0.25rem;
+    }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-glass i {
+            margin-right: 8px;
+        }
+
+    /* Empty state for recent modules */
+    .empty-state {
+        padding: 3rem 1.5rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+        .empty-state .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .welcome-section {
+            padding: 1.5rem;
+        }
+
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+
+        .glass-card .display-1 {
+            font-size: 2.5rem;
+        }
+
+        .glass-card .card-title {
+            font-size: 1.8rem;
+        }
+
+        .glass-table-card .table {
+            font-size: 0.85rem;
+        }
+
+            .glass-table-card .table thead th,
+            .glass-table-card .table tbody td {
+                padding: 0.5rem 0.8rem;
+            }
+
+        .btn-glass {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            margin: 0.15rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .welcome-section {
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+
+        .glass-card {
+            padding: 1rem;
+        }
+
+            .glass-card .display-1 {
+                font-size: 2rem;
+            }
+
+            .glass-card .card-title {
+                font-size: 1.5rem;
+            }
+
+        .glass-table-card .table {
+            font-size: 0.75rem;
+        }
+
+            .glass-table-card .table thead th,
+            .glass-table-card .table tbody td {
+                padding: 0.3rem 0.5rem;
+            }
+
+        .btn-glass {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<!-- Background Image -->
+<div class="full-page-background"></div>
+
+<!-- Main Content -->
+<div class="dashboard-wrapper">
+    <div class="container">
+
+        <!-- Welcome Section with Quick Actions -->
+        <div class="welcome-section">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1>
+                        <i class="fas fa-graduation-cap me-3"></i> Welcome to RAISE COLLEGE
+                    </h1>
+                    <p class="lead">Manage your students, venues, and modules all in one place.</p>
+                    <hr />
+                    <p>
+                        <i class="fas fa-arrow-right me-2"></i> Get started by creating a new record below.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                    <a asp-controller="Students" asp-action="Create" class="btn-glass">
+                        <i class="fas fa-user-plus"></i> Add Student
+                    </a>
+                    <a asp-controller="Venues" asp-action="Create" class="btn-glass">
+                        <i class="fas fa-plus-circle"></i> Add Venue
+                    </a>
+                    <a asp-controller="Modules" asp-action="Create" class="btn-glass">
+                        <i class="fas fa-plus"></i> Add Module
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="display-1 text-primary">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="card-title">@ViewBag.TotalStudents</div>
+                    <p class="card-text">Total Students</p>
+                    <a asp-controller="Students" asp-action="Index" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-right me-1"></i> View All
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="display-1 text-success">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="card-title">@ViewBag.TotalVenues</div>
+                    <p class="card-text">Total Venues</p>
+                    <a asp-controller="Venues" asp-action="Index" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-right me-1"></i> View All
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="display-1 text-info">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="card-title">@ViewBag.TotalModules</div>
+                    <p class="card-text">Total Modules</p>
+                    <a asp-controller="Modules" asp-action="Index" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-right me-1"></i> View All
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Modules -->
+        @if (ViewBag.RecentModules != null && ViewBag.RecentModules.Count > 0)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="glass-table-card">
+                        <div class="card-header">
+                            <i class="fas fa-clock me-2"></i> Recent Modules
+                            <span class="badge bg-light text-dark ms-2">
+                                @ViewBag.RecentModules.Count
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fas fa-user me-1"></i> Student</th>
+                                            <th><i class="fas fa-building me-1"></i> Venue</th>
+                                            <th><i class="fas fa-calendar me-1"></i> Date</th>
+                                            <th><i class="fas fa-clock me-1"></i> Time</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var module in ViewBag.RecentModules)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span class="badge" style="background: rgba(255,255,255,0.15);">
+                                                        <i class="fas fa-user me-1"></i> @module.Student?.StudentName
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" style="background: rgba(255,255,255,0.15);">
+                                                        <i class="fas fa-building me-1"></i> @module.Venue?.VenueName
+                                                    </span>
+                                                </td>
+                                                <td>@module.Date?.ToString("dd MMM yyyy")</td>
+                                                <td>@module.Time?.ToString(@"hh\:mm")</td>
+                                                <td class="text-end">
+                                                    <a asp-controller="Modules" asp-action="Details" asp-route-id="@module.ModuleID"
+                                                       class="btn btn-outline-light btn-sm">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="glass-table-card">
+                        <div class="card-header">
+                            <i class="fas fa-clock me-2"></i> Recent Modules
+                        </div>
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <h5>No modules created yet</h5>
+                                <p class="mb-0">Start by creating your first module.</p>
+                                <a asp-controller="Modules" asp-action="Create" class="btn-glass mt-3">
+                                    <i class="fas fa-plus me-1"></i> Create Module
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
     </div>
-
-
-</body>
-</html>
+</div>
