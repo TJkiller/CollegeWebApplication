@@ -18,10 +18,27 @@ namespace CollegeWebApp.Controllers
             _context = context;
         }
 
-        // GET: Venues
-        public async Task<IActionResult> Index()
+        // GET: Venues with Search and Pagination
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
-            return View(await _context.Venues.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var venues = from v in _context.Venues
+                         select v;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                venues = venues.Where(v =>
+                    v.VenueName != null &&
+                    (v.VenueName.Contains(searchString) ||
+                     v.VenueNumber.ToString().Contains(searchString))
+                );
+            }
+
+            ViewBag.TotalVenues = await venues.CountAsync();
+
+            int pageSize = 10;
+            return View(await PaginatedList<Venue>.CreateAsync(venues, pageNumber ?? 1, pageSize));
         }
 
         // GET: Venues/Details/5
@@ -59,6 +76,7 @@ namespace CollegeWebApp.Controllers
             {
                 _context.Add(venue);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Venue created successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(venue);
@@ -98,6 +116,7 @@ namespace CollegeWebApp.Controllers
                 {
                     _context.Update(venue);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Venue updated successfully!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -142,6 +161,7 @@ namespace CollegeWebApp.Controllers
             if (venue != null)
             {
                 _context.Venues.Remove(venue);
+                TempData["SuccessMessage"] = "Venue deleted successfully!";
             }
 
             await _context.SaveChangesAsync();
