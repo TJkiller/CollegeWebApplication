@@ -8,36 +8,383 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CollegeWebApp.styles.css" asp-append-version="true" />
-  <style>
-        .navbar {
-            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
-            transition: background-color 0.3s, padding 0.3s;
-            
+
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
 
-        footer {
-            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
-            transition: background-color 0.3s, padding 0.3s;
-         
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%) !important;
+            padding: 0.8rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff !important;
+            transition: all 0.3s ease;
+        }
+
+            .navbar-brand:hover {
+                transform: scale(1.02);
+                color: #ffffff !important;
+            }
+
+            .navbar-brand i {
+                margin-right: 10px;
+            }
 
         .navbar-nav .nav-item .nav-link {
-            padding: 0.75rem 1.5rem; 
-            color: #333;
+            padding: 0.6rem 1.2rem;
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin: 0 2px;
         }
 
             .navbar-nav .nav-item .nav-link:hover {
-                background-color: darkslategray; 
+                background-color: rgba(255, 255, 255, 0.15);
+                color: #ffffff !important;
+                transform: translateY(-1px);
             }
-  </style>
 
+            .navbar-nav .nav-item .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.2);
+                color: #ffffff !important;
+                font-weight: 600;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-nav .nav-item .nav-link i {
+                margin-right: 6px;
+            }
+
+        /* Navbar Toggler */
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%) !important;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-top: none !important;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+            footer a {
+                color: rgba(255, 255, 255, 0.9) !important;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+                footer a:hover {
+                    color: #ffffff !important;
+                    text-decoration: underline;
+                }
+
+            footer .container {
+                text-align: center;
+            }
+
+        /* Main Content */
+        .container {
+            padding: 0 20px;
+        }
+
+        main {
+            min-height: 70vh;
+        }
+
+        /* Card Styles */
+        .card-shadow {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+            .card-shadow:hover {
+                box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12);
+            }
+
+        .card-header {
+            border-radius: 12px 12px 0 0 !important;
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table-hover tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .table-hover tbody tr:hover {
+                background-color: rgba(75, 108, 183, 0.05);
+                cursor: pointer;
+            }
+
+        .table-actions .btn {
+            margin: 0 2px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+            .table-actions .btn:hover {
+                transform: scale(1.05);
+            }
+
+        .table-actions .btn-outline-primary {
+            border-color: #4b6cb7;
+            color: #4b6cb7;
+        }
+
+            .table-actions .btn-outline-primary:hover {
+                background-color: #4b6cb7;
+                color: #ffffff;
+            }
+
+        .table-actions .btn-outline-info {
+            border-color: #17a2b8;
+            color: #17a2b8;
+        }
+
+            .table-actions .btn-outline-info:hover {
+                background-color: #17a2b8;
+                color: #ffffff;
+            }
+
+        .table-actions .btn-outline-danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+            .table-actions .btn-outline-danger:hover {
+                background-color: #dc3545;
+                color: #ffffff;
+            }
+
+        /* Avatar Circle */
+        .avatar-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .bg-soft-primary {
+            background-color: rgba(75, 108, 183, 0.15);
+        }
+
+        /* Form Styles */
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 0.6rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #4b6cb7;
+                box-shadow: 0 0 0 0.2rem rgba(75, 108, 183, 0.25);
+            }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .input-group .form-control {
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Badge Styles */
+        .badge.bg-light {
+            background-color: #f8f9fa !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* Pagination */
+        .pagination .page-link {
+            border-radius: 8px;
+            margin: 0 3px;
+            color: #4b6cb7;
+            border-color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+            .pagination .page-link:hover {
+                background-color: #4b6cb7;
+                color: #ffffff;
+                border-color: #4b6cb7;
+            }
+
+        .pagination .page-item.active .page-link {
+            background-color: #4b6cb7;
+            border-color: #4b6cb7;
+            color: #ffffff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #adb5bd;
+        }
+
+        /* Alert Messages */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Button Styles */
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+        .btn-primary {
+            background-color: #4b6cb7;
+            border-color: #4b6cb7;
+        }
+
+            .btn-primary:hover {
+                background-color: #3a5a9e;
+                border-color: #3a5a9e;
+            }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .btn-success:hover {
+                background-color: #218838;
+                border-color: #218838;
+            }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: #ffffff;
+        }
+
+            .btn-info:hover {
+                background-color: #138496;
+                border-color: #138496;
+                color: #ffffff;
+            }
+
+        .btn-lg {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        /* Utility Classes */
+        .text-primary-custom {
+            color: #4b6cb7;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+            .empty-state .empty-icon {
+                font-size: 4rem;
+                opacity: 0.3;
+                margin-bottom: 1rem;
+            }
+
+        /* Responsive */
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .navbar-nav .nav-item .nav-link {
+                padding: 0.5rem 1rem;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            .btn-lg {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RAISE COLLEGE </a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-university"></i> RAISE COLLEGE
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -45,49 +392,104 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Venues" asp-action="Index">Venues</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home"></i> Home
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Modules" asp-action="Index">Modules</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Students" ? "active" : "")"
+                               asp-area="" asp-controller="Students" asp-action="Index">
+                                <i class="fas fa-user-graduate"></i> Students
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Venues" ? "active" : "")"
+                               asp-area="" asp-controller="Venues" asp-action="Index">
+                                <i class="fas fa-building"></i> Venues
+                            </a>
                         </li>
-
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Display">Time Management</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Modules" ? "active" : "")"
+                               asp-area="" asp-controller="Modules" asp-action="Index">
+                                <i class="fas fa-book-open"></i> Modules
+                            </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Privacy" ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Privacy">
+                                <i class="fas fa-shield-alt"></i> Privacy
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
+            <!-- Alert Messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["InfoMessage"] != null)
+            {
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="fas fa-info-circle me-2"></i> @TempData["InfoMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - CollegeWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - CollegeWebApp -
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">
+                <i class="fas fa-shield-alt me-1"></i> Privacy
+            </a>
+            <span class="mx-2">|</span>
+            <a href="mailto:raisecollege@gmail.com">
+                <i class="fas fa-envelope me-1"></i> Contact
+            </a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Auto-dismiss alerts after 5 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
