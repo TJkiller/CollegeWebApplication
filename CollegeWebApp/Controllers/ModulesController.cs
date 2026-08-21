@@ -18,11 +18,30 @@ namespace CollegeWebApp.Controllers
             _context = context;
         }
 
-        // GET: Modules
-        public async Task<IActionResult> Index()
+        // GET: Modules with Search and Pagination
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
-            var collegeDbContext = _context.Modules.Include(m => m.Student).Include(m => m.Venue);
-            return View(await collegeDbContext.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var modules = _context.Modules
+                .Include(m => m.Student)
+                .Include(m => m.Venue)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                modules = modules.Where(m =>
+                    (m.Student != null && m.Student.StudentName != null && m.Student.StudentName.Contains(searchString)) ||
+                    (m.Venue != null && m.Venue.VenueName != null && m.Venue.VenueName.Contains(searchString)) ||
+                    m.ModuleID.ToString().Contains(searchString) ||
+                    m.Date.ToString().Contains(searchString)
+                );
+            }
+
+            ViewBag.TotalModules = await modules.CountAsync();
+
+            int pageSize = 10;
+            return View(await PaginatedList<Module>.CreateAsync(modules, pageNumber ?? 1, pageSize));
         }
 
         // GET: Modules/Details/5
@@ -48,26 +67,50 @@ namespace CollegeWebApp.Controllers
         // GET: Modules/Create
         public IActionResult Create()
         {
-            ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentID");
-            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueID");
+            // Show Student Name instead of ID
+            ViewData["StudentID"] = new SelectList(
+                _context.Students,
+                "StudentID",
+                "StudentName"
+            );
+
+            // Show Venue Name instead of ID
+            ViewData["VenueID"] = new SelectList(
+                _context.Venues,
+                "VenueID",
+                "VenueName"
+            );
             return View();
         }
 
         // POST: Modules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ModuleID,StudentID,VenueID,Date,Time")] Module @module)
         {
             if (ModelState.IsValid)
             {
+                // Optional: Check for conflicts
+                var conflict = await _context.Modules
+                    .AnyAsync(m => m.StudentID == @module.StudentID &&
+                                   m.Date == @module.Date &&
+                                   m.Time == @module.Time);
+
+                if (conflict)
+                {
+                    ModelState.AddModelError("", "This student already has a module at this date and time.");
+                    ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentName", @module.StudentID);
+                    ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueName", @module.VenueID);
+                    return View(@module);
+                }
+
                 _context.Add(@module);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Module created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentID", @module.StudentID);
-            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueID", @module.VenueID);
+            ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentName", @module.StudentID);
+            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueName", @module.VenueID);
             return View(@module);
         }
 
@@ -84,14 +127,23 @@ namespace CollegeWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentID", @module.StudentID);
-            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueID", @module.VenueID);
+
+            ViewData["StudentID"] = new SelectList(
+                _context.Students,
+                "StudentID",
+                "StudentName",
+                @module.StudentID
+            );
+            ViewData["VenueID"] = new SelectList(
+                _context.Venues,
+                "VenueID",
+                "VenueName",
+                @module.VenueID
+            );
             return View(@module);
         }
 
         // POST: Modules/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ModuleID,StudentID,VenueID,Date,Time")] Module @module)
@@ -107,6 +159,7 @@ namespace CollegeWebApp.Controllers
                 {
                     _context.Update(@module);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Module updated successfully!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,8 +174,8 @@ namespace CollegeWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentID", @module.StudentID);
-            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueID", @module.VenueID);
+            ViewData["StudentID"] = new SelectList(_context.Students, "StudentID", "StudentName", @module.StudentID);
+            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "VenueName", @module.VenueID);
             return View(@module);
         }
 
@@ -155,6 +208,7 @@ namespace CollegeWebApp.Controllers
             if (@module != null)
             {
                 _context.Modules.Remove(@module);
+                TempData["SuccessMessage"] = "Module deleted successfully!";
             }
 
             await _context.SaveChangesAsync();
