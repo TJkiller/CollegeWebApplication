@@ -2,66 +2,420 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            line-height: 1.6;
+<style>
+    /* Full page background */
+    .full-page-background {
+        background-image: url('/images/college2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+        .full-page-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 1;
         }
 
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-           
-        }
+    /* Main content wrapper */
+    .page-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 20px 0 40px 0;
+    }
 
-        h1, h2 {
+    /* Glass Card */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 20px;
+        overflow: hidden;
+        color: #ffffff;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        padding: 2.5rem;
+    }
+
+    /* Header */
+    .privacy-header {
+        text-align: center;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 2rem;
+    }
+
+        .privacy-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
             color: #ffffff;
-            background-color: #5a67d8; 
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            margin-bottom: 10px; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
         }
 
-        p, ul {
-            margin: 10px 0;
+        .privacy-header .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
-    </style>
-</head>
-<body>
+
+            .privacy-header .subtitle span {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+        .privacy-header .last-updated {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+    /* Section Styles */
+    .privacy-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
+        border-left: 3px solid rgba(75, 108, 183, 0.4);
+        transition: all 0.3s ease;
+    }
+
+        .privacy-section:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: rgba(75, 108, 183, 0.8);
+            transform: translateX(5px);
+        }
+
+        .privacy-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .privacy-section h2 i {
+                color: #4b6cb7;
+                font-size: 1.2rem;
+                width: 30px;
+                text-align: center;
+            }
+
+        .privacy-section p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .privacy-section ul {
+            color: rgba(255, 255, 255, 0.8);
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0 0;
+        }
+
+            .privacy-section ul li {
+                padding: 0.3rem 0;
+                padding-left: 1.5rem;
+                position: relative;
+            }
+
+                .privacy-section ul li::before {
+                    content: '▸';
+                    position: absolute;
+                    left: 0;
+                    color: #4b6cb7;
+                    font-weight: bold;
+                }
+
+    /* Contact Section */
+    .contact-section {
+        background: rgba(75, 108, 183, 0.15);
+        border: 1px solid rgba(75, 108, 183, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-top: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+        .contact-section .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+            .contact-section .contact-info a {
+                color: rgba(255, 255, 255, 0.85);
+                text-decoration: none;
+                transition: all 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.4rem 1rem;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+                .contact-section .contact-info a:hover {
+                    color: #ffffff;
+                    background: rgba(255, 255, 255, 0.12);
+                    transform: translateY(-2px);
+                }
+
+                .contact-section .contact-info a i {
+                    color: #4b6cb7;
+                    font-size: 1.1rem;
+                }
+
+        .contact-section .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+
+            .contact-section .trust-badge i {
+                font-size: 1.5rem;
+                color: #28a745;
+            }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .glass-card {
+            padding: 1.5rem;
+        }
+
+        .privacy-header h1 {
+            font-size: 2rem;
+        }
+
+        .privacy-header .subtitle {
+            font-size: 0.9rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .privacy-section {
+            padding: 1rem;
+        }
+
+            .privacy-section h2 {
+                font-size: 1.1rem;
+            }
+
+            .privacy-section p {
+                font-size: 0.9rem;
+            }
+
+        .contact-section {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+        }
+
+            .contact-section .contact-info {
+                gap: 0.5rem;
+                flex-direction: column;
+                width: 100%;
+            }
+
+                .contact-section .contact-info a {
+                    width: 100%;
+                    justify-content: center;
+                }
+
+            .contact-section .trust-badge {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.75rem;
+            }
+    }
+
+    @@media (max-width: 576px) {
+        .glass-card {
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .privacy-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .privacy-section {
+            padding: 0.8rem;
+        }
+
+            .privacy-section h2 {
+                font-size: 1rem;
+            }
+
+            .privacy-section p {
+                font-size: 0.85rem;
+            }
+
+        .privacy-header .last-updated {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.8rem;
+        }
+    }
+</style>
+
+<!-- Background Image -->
+<div class="full-page-background"></div>
+
+<!-- Main Content -->
+<div class="page-wrapper">
     <div class="container">
-        <h1>@ViewData["Title"]</h1>
+        <div class="glass-card">
 
-        <p>Welcome to our website. We understand that privacy online is crucial to users of our Site, especially when conducting business. This statement governs our privacy policies with respect to those users of the Site, who visit without transacting business and Visitors who register to transact business on the Site and make use of the various services offered by Raise college.</p>
+            <!-- Header -->
+            <div class="privacy-header">
+                <h1>
+                    <i class="fas fa-shield-alt me-2" style="color: #4b6cb7;"></i> @ViewData["Title"]
+                </h1>
+                <div class="subtitle">
+                    <span>
+                        <i class="fas fa-calendar-alt"></i> Last Updated: @DateTime.Now.ToString("dd MMMM yyyy")
+                    </span>
+                    <span class="last-updated">
+                        <i class="fas fa-check-circle" style="color: #28a745;"></i> We value your privacy
+                    </span>
+                </div>
+            </div>
 
-        <h2>Personal Information</h2>
-        <p>We collect personal information from Students and Parents or Guardians. This information includes limited names, addresses, phone numbers, and academic records. We use this information solely for the purpose of providing and improving our educational services.</p>
+            <!-- Introduction -->
+            <div class="privacy-section" style="border-left-color: rgba(75, 108, 183, 0.8);">
+                <h2>
+                    <i class="fas fa-info-circle"></i> Introduction
+                </h2>
+                <p>
+                    Welcome to RAISE COLLEGE. We understand that privacy online is crucial to users of our Site,
+                    especially when conducting business. This statement governs our privacy policies with respect
+                    to those users of the Site, who visit without transacting business and Visitors who register
+                    to transact business on the Site and make use of the various services offered by RAISE COLLEGE.
+                </p>
+            </div>
 
-        <h2>Information Use</h2>
-        <p>Your information is used to tailor your experience at our site, enabling us to present content we think you might be interested in. We may use your contact information to inform you of new services or announcements related to our school.</p>
+            <!-- Personal Information -->
+            <div class="privacy-section" style="border-left-color: rgba(40, 167, 69, 0.6);">
+                <h2>
+                    <i class="fas fa-user"></i> Personal Information
+                </h2>
+                <p>
+                    We collect personal information from Students and Parents or Guardians. This information
+                    includes limited names, addresses, phone numbers, and academic records. We use this
+                    information solely for the purpose of providing and improving our educational services.
+                </p>
+            </div>
 
-        <h2>Sharing Information</h2>
-        <p>We may share aggregated information regarding our Visitors, including the demographics of our Visitors and Authorized Customers with our affiliated agencies and third-party vendors. We also offer the opportunity to "opt-out" of receiving information or being contacted by us or by any agency acting on our behalf.</p>
+            <!-- Information Use -->
+            <div class="privacy-section" style="border-left-color: rgba(23, 162, 184, 0.6);">
+                <h2>
+                    <i class="fas fa-chart-line"></i> Information Use
+                </h2>
+                <p>
+                    Your information is used to tailor your experience at our site, enabling us to present
+                    content we think you might be interested in. We may use your contact information to
+                    inform you of new services or announcements related to our school.
+                </p>
+            </div>
 
-        <h2>Security</h2>
-        <p>The security of your Personal Information is important to us, but remember that no method of transmission over the Internet, or method of electronic storage, is 100% secure. While we strive to use commercially acceptable means to protect your Personal Information, we cannot guarantee its absolute security.</p>
+            <!-- Sharing Information -->
+            <div class="privacy-section" style="border-left-color: rgba(255, 193, 7, 0.6);">
+                <h2>
+                    <i class="fas fa-share-alt"></i> Sharing Information
+                </h2>
+                <p>
+                    We may share aggregated information regarding our Visitors, including the demographics
+                    of our Visitors and Authorized Customers with our affiliated agencies and third-party
+                    vendors. We also offer the opportunity to "opt-out" of receiving information or being
+                    contacted by us or by any agency acting on our behalf.
+                </p>
+            </div>
 
-        <h2>Children's Privacy</h2>
-        <p>Protecting the privacy of the very young is especially important. For that reason, we never collect or maintain information at our Site from those we actually know are under 13, and no part of our website is structured to attract anyone under 13.</p>
+            <!-- Security -->
+            <div class="privacy-section" style="border-left-color: rgba(220, 53, 69, 0.6);">
+                <h2>
+                    <i class="fas fa-lock"></i> Security
+                </h2>
+                <p>
+                    The security of your Personal Information is important to us, but remember that no
+                    method of transmission over the Internet, or method of electronic storage, is 100% secure.
+                    While we strive to use commercially acceptable means to protect your Personal Information,
+                    we cannot guarantee its absolute security.
+                </p>
+            </div>
 
-        <h2>Changes to Our Privacy Policy</h2>
-        <p>The Site may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.</p>
+            <!-- Children's Privacy -->
+            <div class="privacy-section" style="border-left-color: rgba(111, 66, 193, 0.6);">
+                <h2>
+                    <i class="fas fa-child"></i> Children's Privacy
+                </h2>
+                <p>
+                    Protecting the privacy of the very young is especially important. For that reason, we
+                    never collect or maintain information at our Site from those we actually know are under 13,
+                    and no part of our website is structured to attract anyone under 13.
+                </p>
+            </div>
 
-        <h2>Contact Information</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us via email at raisecollege@gmail.com or phone at 012 345 6474.</p>
+            <!-- Changes to Policy -->
+            <div class="privacy-section" style="border-left-color: rgba(253, 126, 20, 0.6);">
+                <h2>
+                    <i class="fas fa-edit"></i> Changes to Our Privacy Policy
+                </h2>
+                <p>
+                    The Site may update this Privacy Policy from time to time. We will notify you of any
+                    changes by posting the new Privacy Policy on this page. You are advised to review this
+                    Privacy Policy periodically for any changes.
+                </p>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <div class="contact-info">
+                    <a href="mailto:raisecollege@gmail.com">
+                        <i class="fas fa-envelope"></i> raisecollege@gmail.com
+                    </a>
+                    <a href="tel:0123456474">
+                        <i class="fas fa-phone"></i> 012 345 6474
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-map-marker-alt"></i> Find Us
+                    </a>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your privacy matters to us</span>
+                </div>
+            </div>
+
+        </div>
     </div>
-</body>
-</html>
+</div>
